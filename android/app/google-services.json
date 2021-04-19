@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "571474745399",
+    "project_id": "trans-a6b74",
+    "storage_bucket": "trans-a6b74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571474745399:android:14df567d3e733bde0747b2",
+        "android_client_info": {
+          "package_name": "com.thetransfigure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571474745399-i69i5e45em3p697ic6fv7oqkst9i28et.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEiYqNyu5UHQ1OSEGtvGAPmkWEZwl1UgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571474745399-i69i5e45em3p697ic6fv7oqkst9i28et.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
