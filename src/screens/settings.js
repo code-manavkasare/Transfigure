@@ -37,6 +37,7 @@ import {
 import {
   fetchSettingsInfo,
   notificationToggle,
+  onesignalNotificationToggle,
   updateInfo,
 } from "../func/userSettings";
 
@@ -151,6 +152,7 @@ class MySettings extends React.Component {
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: true });
         let resp = await notificationToggle(this.props.user.authKey, true);
+        await onesignalNotificationToggle(true);
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -167,6 +169,7 @@ class MySettings extends React.Component {
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: false });
         let resp = await notificationToggle(this.props.user.authKey, false);
+        await onesignalNotificationToggle(false);
         console.log(resp, "resp");
       } catch (error) {
         // Error retrieving data
