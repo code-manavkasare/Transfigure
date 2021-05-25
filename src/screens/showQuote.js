@@ -11,7 +11,7 @@ import {
   Dimensions,
   ScrollView,
   ImageBackground,
-  Platform
+  Platform,
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -52,6 +52,8 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { SliderBox } from "react-native-image-slider-box";
 import RBSheet from "react-native-raw-bottom-sheet";
 
+const { width, height } = Dimensions.get("screen");
+
 class ShowQuote extends React.Component {
   constructor(props) {
     super(props);
@@ -61,6 +63,7 @@ class ShowQuote extends React.Component {
       username: "",
       commentOverlayVis: false,
       comment: "",
+      reply: "",
       loading: false,
       chosenCommentID: "",
       chosenCommentType: 0,
@@ -72,7 +75,8 @@ class ShowQuote extends React.Component {
       replies: null,
       chosenReplyID: "",
       searchTreeKey: "",
-      chosenTotalData: []
+      chosenTotalData: [],
+      choosenComment: {},
     };
   }
 
@@ -361,7 +365,7 @@ class ShowQuote extends React.Component {
         this.props.user.authKey,
         this.state.myQuote.quoteID,
         this.state.chosenCommentID,
-        (this.state.comment + "_" + (this.state.chosenReplyID)),
+        this.state.comment + "_" + this.state.chosenReplyID
       );
 
       if (resp) {
@@ -373,8 +377,7 @@ class ShowQuote extends React.Component {
         this.setState({ myQuote: quote });
       }
       this.setState({ loading: false, comment: "" });
-      this.RBSheet.close()
-      
+      this.RBSheet.close();
     }
     if (this.state.chosenCommentType == 0) {
       this.setState({ loading: true, commentOverlayVis: false });
@@ -527,19 +530,19 @@ class ShowQuote extends React.Component {
           >
             {likes}
           </Text> */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{ flexDirection: "row", marginRight: "2%" }}
             onPress={() =>
               this.setState({
                 commentOverlayVis: true,
                 chosenCommentType: 1,
                 chosenCommentID: data.commentID,
-                chosenReplyID: data.addedAt
+                chosenReplyID: data.addedAt,
               })
             }
           >
-            <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" />
-            {/* <Text
+            <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" /> */}
+          {/* <Text
               style={{
                 fontWeight: "bold",
                 color: "#3f32d2",
@@ -550,7 +553,7 @@ class ShowQuote extends React.Component {
             >
               {this.props.translateText("showQuote.reply")}
             </Text> */}
-          </TouchableOpacity>
+          {/* </TouchableOpacity> */}
           {/* {this.showRespectDislikeComment(data)} */}
         </View>
       );
@@ -603,12 +606,7 @@ class ShowQuote extends React.Component {
             }}
             style={{ flexDirection: "row", alignItems: "center" }}
           >
-            <Icon
-              name="dislike1"
-              type="antdesign"
-              size={16}
-              color="red"
-            />
+            <Icon name="dislike1" type="antdesign" size={16} color="red" />
             <Text
               style={{
                 fontSize: 14,
@@ -874,7 +872,7 @@ class ShowQuote extends React.Component {
               <Text style={{ fontSize: 12, marginLeft: 10 }}>{addedat}</Text>
             </View>
             <Text style={{ textAlign: "justify", marginRight: "10%" }}>
-              {(item.replyText).split('_')[0]}
+              {item.replyText.split("_")[0]}
             </Text>
           </View>
         </View>
@@ -884,7 +882,11 @@ class ShowQuote extends React.Component {
   }
 
   showTreeRespectDislikeComment(data, item) {
-    let treeData = (typeof this.state.chosenTotalData === 'object') && this.state.chosenTotalData.filter(tree => tree.replyText.search(item.addedAt) >= 0 )
+    let treeData =
+      typeof this.state.chosenTotalData === "object" &&
+      this.state.chosenTotalData.filter(
+        (tree) => tree.replyText.search(item.addedAt) >= 0
+      );
     return (
       <View
         style={{
@@ -912,7 +914,7 @@ class ShowQuote extends React.Component {
             this.setState({
               commentOverlayVis: true,
               chosenCommentType: 1,
-              chosenReplyID: item.addedAt
+              chosenReplyID: item.addedAt,
             })
           }
         >
@@ -934,8 +936,8 @@ class ShowQuote extends React.Component {
           <TouchableOpacity
             style={{ marginLeft: "20%", marginVertical: "2%" }}
             onPress={() => {
-              this.showReplies(treeData)
-              this.setState({ searchTreeKey: item.addedAt })
+              this.showReplies(treeData);
+              this.setState({ searchTreeKey: item.addedAt });
             }}
           >
             <Text style={{ fontSize: 13, color: "red", fontWeight: "700" }}>
@@ -949,37 +951,29 @@ class ShowQuote extends React.Component {
 
   renderCommentsOfComment() {
     let data = this.state.replies;
-    if (this.state.searchTreeKey == '' && data) {
-      console.log("test+++++++++++++++++++++")
-      console.log(data)
+    if (this.state.searchTreeKey == "" && data) {
+      console.log("test+++++++++++++++++++++");
+      console.log(data);
       let beforeReverse = data.replies;
       let afterReverse = [].concat(beforeReverse);
       return (
         <View>
-          {afterReverse.map((item, i) =>
-            ((typeof item === 'object') && (item.replyText).search(data.addedAt) >= 0) &&
-            this.renderOneCommentOfComment(
-              item,
-              i,
-              data
-            )
+          {afterReverse.map(
+            (item, i) =>
+              typeof item === "object" &&
+              item.replyText.search(data.addedAt) >= 0 &&
+              this.renderOneCommentOfComment(item, i, data)
           )}
         </View>
       );
     }
 
-    if (this.state.searchTreeKey != '' && data) {
-         return (
-          <View>
-            {data.map((item, i) =>
-              this.renderOneCommentOfComment(
-                item,
-                i,
-                data
-              )
-            )}
-          </View>
-        );
+    if (this.state.searchTreeKey != "" && data) {
+      return (
+        <View>
+          {data.map((item, i) => this.renderOneCommentOfComment(item, i, data))}
+        </View>
+      );
     }
   }
 
@@ -1002,6 +996,9 @@ class ShowQuote extends React.Component {
           alignSelf: "center",
           alignItems: "flex-start",
           marginTop: "5%",
+          paddingBottom: 15,
+          borderBottomWidth: 0.5,
+          borderBottomColor: "rgba(30,30,30,0.3)",
         }}
       >
         <View style={{ flexDirection: "row" }}>
@@ -1026,26 +1023,41 @@ class ShowQuote extends React.Component {
               ) : null}
               <Text style={{ fontSize: 10, marginLeft: "10%" }}>{addedat}</Text>
             </View>
-            <Text style={{ textAlign: "justify", marginRight: "10%" }}>
+            <Text
+              style={{
+                textAlign: "justify",
+                marginLeft: -2,
+                marginRight: "10%",
+              }}
+            >
               {data.commentText}
             </Text>
             {this.renderLikesCommentsNumberReply(data)}
           </View>
         </View>
         {data.replies.length ? (
-          <TouchableOpacity
-            style={{ marginLeft: "20%", marginVertical: "2%" }}
-            onPress={() => {
-              this.showReplies(data)
-              this.setState({ searchTreeKey: "" })
-              this.setState({chosenCommentID: data.commentID})
-              this.setState({chosenTotalData: data.replies})
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginLeft: "16%",
             }}
           >
-            <Text style={{ fontSize: 13, color: "red", fontWeight: "700" }}>
-              {data.replies.length} REPLIES
-            </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.showReplies({ ...data, username });
+                this.setState({ searchTreeKey: "" });
+                this.setState({ chosenCommentID: data.commentID });
+                this.setState({ chosenTotalData: data.replies });
+              }}
+            >
+              <Text style={{ color: "#3f32d2", fontSize: 14, marginRight: 5 }}>
+                {data.replies.length === 1
+                  ? `${data.replies.length} REPLY`
+                  : `${data.replies.length} REPLIES`}
+              </Text>
+            </TouchableOpacity>
+          </View>
         ) : null}
       </View>
     );
@@ -1068,7 +1080,7 @@ class ShowQuote extends React.Component {
             ref={(ref) => {
               this.RBSheet = ref;
             }}
-            height={400}
+            height={height * 0.75}
             closeOnDragDown={true}
             openDuration={250}
             customStyles={{
@@ -1078,6 +1090,55 @@ class ShowQuote extends React.Component {
             <View style={styles.mainHeading}>
               <Text style={styles.mainHeadingText}>Replies</Text>
             </View>
+            {this.state.replies && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: "#f2f2f2",
+                  paddingVertical: 20,
+                }}
+              >
+                {this.showAvatar(
+                  this.state.replies.avatarURI,
+                  this.state.replies.addedByUuid
+                )}
+                <View style={{ marginHorizontal: "5%" }}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 14 }}>
+                      {this.state.replies.username}
+                    </Text>
+                    <Text style={{ fontSize: 10, marginLeft: "10%" }}>
+                      {this.state.replies.addedat}
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      textAlign: "justify",
+                      marginLeft: -2,
+                      marginRight: "10%",
+                    }}
+                  >
+                    {this.state.replies.commentText}
+                  </Text>
+                  {this.renderLikesCommentsNumberReply(this.state.replies)}
+                </View>
+              </View>
+            )}
+            <TextInput
+              style={{
+                backgroundColor: "#fff",
+                paddingVertical: 20,
+                paddingHorizontal: 20,
+                borderBottomColor: "rgba(30,30,30,0.3)",
+                borderBottomWidth: 0.5,
+                color: "#000",
+              }}
+              placeholder="Add your reply here..."
+              placeholderTextColor="grey"
+              value={this.state.reply}
+              onChange={(text) => this.setState({ reply: text })}
+            />
+
             {this.renderCommentsOfComment()}
           </RBSheet>
         </View>
@@ -1295,7 +1356,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
     elevation: 20,
-    marginTop: Platform.OS !== 'ios' ? 30 : 0
+    marginTop: Platform.OS !== "ios" ? 30 : 0,
   },
   buttonLogin: {
     width: "50%",
@@ -1344,14 +1405,14 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   mainHeading: {
-    textAlign: 'center'
+    textAlign: "center",
   },
   mainHeadingText: {
     fontSize: 16,
-    fontWeight: '500',
-    backgroundColor: '#f2f2f2',
-    padding: 10
-  }
+    fontWeight: "500",
+    backgroundColor: "#fff",
+    padding: 10,
+  },
 });
 
 const mapDispatchToProps = (dispatch) => {

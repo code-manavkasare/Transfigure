@@ -349,6 +349,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				970FCE2FE756ED9745B4FA12 /* [CP] Copy Pods Resources */,
+				386FC30FA4FCED4DE4A64BF3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -372,6 +373,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				F266A852B82D76FF73E25143 /* [CP] Copy Pods Resources */,
 				69B0F0D7261E41D400745FC1 /* Embed App Extensions */,
+				9AA27828C2372D4DAFF5C5D4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -568,6 +570,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+		386FC30FA4FCED4DE4A64BF3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Beacon-BeaconTests/Pods-Beacon-BeaconTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beacon-BeaconTests/Pods-Beacon-BeaconTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6D0F5047B54943BA0CF4CDAE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -684,6 +704,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beacon-BeaconTests/Pods-Beacon-BeaconTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9AA27828C2372D4DAFF5C5D4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Beacon/Pods-Beacon-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Beacon/Pods-Beacon-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BF856E847A2685BCE48B6935 /* [CP] Check Pods Manifest.lock */ = {
@@ -948,6 +986,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = Beacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -977,6 +1016,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WPDN2CBGA6;
 				INFOPLIST_FILE = Beacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

@@ -270,7 +270,9 @@ export async function notificationToggle(authKey, notificationEnabled) {
 }
 
 export async function onesignalNotificationToggle(state) {
-  OneSignal.disablePush(state);
+  await OneSignal.disablePush(state);
+  const deviceState = await OneSignal.getDeviceState();
+  console.log("state", deviceState);
 }
 
 export async function deleteUserAccount(authKey, reason) {
