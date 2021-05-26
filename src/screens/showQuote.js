@@ -368,16 +368,25 @@ class ShowQuote extends React.Component {
         this.state.comment + "_" + this.state.chosenReplyID
       );
 
+      console.log("resply to comment resp", resp);
+
       if (resp) {
         //refresh
         let quote = await getOneQuote(
           this.props.user.authKey,
           this.state.myQuote.quoteID
         );
-        this.setState({ myQuote: quote });
+        console.log("quote", quote);
+        const currentIndex = quote.comments.findIndex(
+          ({ commentID }) => commentID === this.state.chosenCommentID
+        );
+        this.setState({
+          myQuote: quote,
+          replies: quote.comments[currentIndex],
+        });
       }
       this.setState({ loading: false, comment: "" });
-      this.RBSheet.close();
+      // this.RBSheet.close();
     }
     if (this.state.chosenCommentType == 0) {
       this.setState({ loading: true, commentOverlayVis: false });
@@ -908,7 +917,7 @@ class ShowQuote extends React.Component {
         >
           {likes}
         </Text> */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ flexDirection: "row", marginRight: "2%" }}
           onPress={() =>
             this.setState({
@@ -918,8 +927,8 @@ class ShowQuote extends React.Component {
             })
           }
         >
-          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" />
-          {/* <Text
+          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" /> */}
+        {/* <Text
             style={{
               fontWeight: "bold",
               color: "#3f32d2",
@@ -930,7 +939,7 @@ class ShowQuote extends React.Component {
           >
             {this.props.translateText("showQuote.reply")}
           </Text> */}
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
         {/* {this.showRespectDislikeComment(data)} */}
         {treeData.length ? (
           <TouchableOpacity
@@ -956,6 +965,7 @@ class ShowQuote extends React.Component {
       console.log(data);
       let beforeReverse = data.replies;
       let afterReverse = [].concat(beforeReverse);
+      console.log("rendering", afterReverse);
       return (
         <View>
           {afterReverse.map(
@@ -1035,7 +1045,7 @@ class ShowQuote extends React.Component {
             {this.renderLikesCommentsNumberReply(data)}
           </View>
         </View>
-        {data.replies.length ? (
+        {data.replies.length !== null ? (
           <View
             style={{
               flexDirection: "row",
@@ -1045,10 +1055,13 @@ class ShowQuote extends React.Component {
           >
             <TouchableOpacity
               onPress={() => {
-                this.showReplies({ ...data, username });
-                this.setState({ searchTreeKey: "" });
-                this.setState({ chosenCommentID: data.commentID });
-                this.setState({ chosenTotalData: data.replies });
+                console.log("data", data);
+                this.setState({
+                  chosenCommentType: 1,
+                  chosenCommentID: data.commentID,
+                  chosenReplyID: data.addedAt,
+                });
+                this.showReplies(data);
               }}
             >
               <Text style={{ color: "#3f32d2", fontSize: 14, marginRight: 5 }}>
@@ -1065,8 +1078,9 @@ class ShowQuote extends React.Component {
 
   showReplies(data) {
     console.log(data, "test data");
-    this.setState({ replies: data });
-    this.RBSheet.open();
+    this.setState({ replies: data }, () => {
+      this.RBSheet.open();
+    });
   }
 
   renderComments() {
@@ -1124,20 +1138,40 @@ class ShowQuote extends React.Component {
                 </View>
               </View>
             )}
-            <TextInput
+            <View
               style={{
-                backgroundColor: "#fff",
-                paddingVertical: 20,
-                paddingHorizontal: 20,
-                borderBottomColor: "rgba(30,30,30,0.3)",
-                borderBottomWidth: 0.5,
-                color: "#000",
+                flexDirection: "row",
+                alignItems: "center",
+                width: "100%",
               }}
-              placeholder="Add your reply here..."
-              placeholderTextColor="grey"
-              value={this.state.reply}
-              onChange={(text) => this.setState({ reply: text })}
-            />
+            >
+              <TextInput
+                style={{
+                  backgroundColor: "#fff",
+                  paddingVertical: 20,
+                  paddingHorizontal: 20,
+                  borderBottomColor: "rgba(30,30,30,0.3)",
+                  borderBottomWidth: 0.5,
+                  width: width * 0.85,
+                  color: "#000",
+                }}
+                placeholder="Type your reply here..."
+                placeholderTextColor="grey"
+                value={this.state.comment}
+                onChangeText={(value) => this.setState({ comment: value })}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  // if (this.state.comment.length > 0) {
+                  console.log("adding comment");
+                  this.handleAddComment();
+                  // }
+                }}
+                style={{ marginRight: 10 }}
+              >
+                <Text style={{ color: "#3f32d2" }}>Send</Text>
+              </TouchableOpacity>
+            </View>
 
             {this.renderCommentsOfComment()}
           </RBSheet>
@@ -1162,7 +1196,12 @@ class ShowQuote extends React.Component {
       >
         <View>
           <Text
-            style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}
+            style={{
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              marginTop: 15,
+            }}
           >
             {this.props.translateText("showQuote.add_your_comment")}
           </Text>
@@ -1172,7 +1211,7 @@ class ShowQuote extends React.Component {
             onChangeText={(value) => this.setState({ comment: value })}
             multiline={true}
             maxLength={300}
-            style={{ fontSize: 20 }}
+            style={{ fontSize: 20, marginVertical: 15 }}
           />
           <TouchableOpacity
             style={{
