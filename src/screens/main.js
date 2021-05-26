@@ -10,11 +10,11 @@ import {
   SafeAreaView,
   Dimensions,
   ScrollView,
-  Platform
+  Platform,
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { updateKey, translateText } from "../actions/user";
+import { updateKey, translateText, registerUser } from "../actions/user";
 import { Header, Icon } from "react-native-elements";
 import Beacon from "react-native-vector-icons/MaterialCommunityIcons";
 import moment from "moment";
@@ -24,9 +24,16 @@ import GestureRecognizer, {
 import MyFooter from "../components/centerComp";
 import { fetchSettingsInfo } from "../func/userSettings";
 
+import PushNotification from "react-native-push-notification";
+import NotifService from "../func/notificationService";
+
+import OneSignal from "react-native-onesignal";
+import { LogBox } from "react-native";
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       email: "",
       password: "",
@@ -38,11 +45,109 @@ class Main extends React.Component {
         this.props.translateText("main.i_achived"),
         this.props.translateText("main.i_tried"),
       ],
+      notificationFlag: true,
+      isSubscribed: false,
     };
+
+    this.notif = new NotifService(
+      this.onRegister.bind(this),
+      this.onNotif.bind(this)
+    );
   }
 
+  init = async () => {
+    /* O N E S I G N A L   S E T U P */
+    if (Platform.OS === "ios") {
+      OneSignal.setAppId("ed89b83a-a66b-42f1-b255-bc04ba3eb303");
+    } else {
+      OneSignal.setAppId("7622a398-d4d2-4c94-b402-eecef800c786");
+    }
+    OneSignal.promptForPushNotificationsWithUserResponse((response) => {
+      this.OSLog("Prompt response:", response);
+    });
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setRequiresUserPrivacyConsent(true);
+    OneSignal.provideUserConsent(true);
+
+    /* O N E S I G N A L  H A N D L E R S */
+    OneSignal.setNotificationWillShowInForegroundHandler(
+      (notifReceivedEvent) => {
+        this.OSLog(
+          "OneSignal: notification will show in foreground:",
+          notifReceivedEvent
+        );
+        let notif = notifReceivedEvent.getNotification();
+
+        const button1 = {
+          text: "Cancel",
+          onPress: () => {
+            notifReceivedEvent.complete();
+          },
+          style: "cancel",
+        };
+
+        const button2 = {
+          text: "Complete",
+          onPress: () => {
+            notifReceivedEvent.complete(notif);
+          },
+        };
+
+        Alert.alert("Complete notification?", "Test", [button1, button2], {
+          cancelable: true,
+        });
+      }
+    );
+    OneSignal.setNotificationOpenedHandler((notification) => {
+      this.OSLog("OneSignal: notification opened:", notification);
+    });
+    OneSignal.setInAppMessageClickHandler((event) => {
+      this.OSLog("OneSignal IAM clicked:", event);
+    });
+    OneSignal.addEmailSubscriptionObserver((event) => {
+      this.OSLog("OneSignal: email subscription changed: ", event);
+    });
+    OneSignal.addSubscriptionObserver((event) => {
+      this.OSLog("OneSignal: subscription changed:", event);
+      this.setState({ isSubscribed: event.to.isSubscribed });
+    });
+    OneSignal.addPermissionObserver((event) => {
+      this.OSLog("OneSignal: permission changed:", event);
+    });
+
+    const deviceState = await OneSignal.getDeviceState();
+    this.setState({
+      isSubscribed: deviceState.isSubscribed,
+    });
+  };
+
+  OSLog = (message, optionalArg) => {
+    if (optionalArg) {
+      message = message + JSON.stringify(optionalArg);
+    }
+
+    console.log(message);
+
+    let consoleValue;
+
+    if (this.state.consoleValue) {
+      consoleValue = this.state.consoleValue + "\n" + message;
+    } else {
+      consoleValue = message;
+    }
+    this.setState({ consoleValue });
+  };
+
+  onRegister(token) {
+    console.log(token);
+  }
+
+  onNotif(notif) {
+    console.log(notif);
+  }
   async componentDidMount() {
-    console.disableYellowBox = true;
+    setTimeout(() => this.init(), 3000);
+    LogBox.ignoreAllLogs(true);
     let resp = await fetchSettingsInfo(this.props.user.authKey);
     let name = "USER'S";
     if (resp) {
@@ -144,7 +249,7 @@ class Main extends React.Component {
             style={{
               flexDirection: "row",
               marginHorizontal: "5%",
-              marginTop: Platform.OS !== 'ios' ? 50 : 20,
+              marginTop: Platform.OS !== "ios" ? 50 : 20,
               justifyContent: "space-between",
             }}
           >

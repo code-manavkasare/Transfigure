@@ -12,6 +12,7 @@ import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import {reportQuote} from '../func/quotes'
 
+import { LogBox } from "react-native";
 import {
     Menu,
     MenuOptions,
@@ -29,7 +30,7 @@ this.state={}
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
 

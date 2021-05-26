@@ -12,6 +12,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Badge } from 'native-base';
 import { getMyPostsNotification,getNotifLength,deleteNotification } from '../func/notifications'
 
+import { LogBox } from "react-native";
 
 import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail} from 'native-base';
 
@@ -26,7 +27,7 @@ this.state={notifications:[],loading:true,timezone:'Europe/Belfast',lengthOfAllN
  
   }
 async  componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
 await this.setTimezone()
 await this.fetchNotifications()

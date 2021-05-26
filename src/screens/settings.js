@@ -15,8 +15,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { LogBox } from "react-native";
 import CountryPicker from "react-native-country-picker-modal";
 import { Avatar, Icon, Overlay } from "react-native-elements";
+import OneSignal from "react-native-onesignal";
+import PushNotification from "react-native-push-notification";
 import Entypo from "react-native-vector-icons/Entypo";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -72,7 +76,7 @@ class MySettings extends React.Component {
   }
 
   async componentDidMount() {
-    console.disableYellowBox = true;
+    LogBox.ignoreAllLogs(true);
     await this.getInformation();
     await this.checkStorage();
   }
@@ -139,9 +143,11 @@ class MySettings extends React.Component {
     }
   }
 
-  async notificationToggle() {
+  async notificationToggleLocal() {
+    console.log("what");
     if (!this.state.notificationEnabled) {
       try {
+        OneSignal.disablePush(false);
         let myObj = {
           authKey: this.props.user.authKey,
           uuID: this.props.user.uuID,
@@ -150,7 +156,10 @@ class MySettings extends React.Component {
         };
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: true });
-        let resp = await notificationToggle(this.props.user.authKey, true);
+        let resp = await notificationToggle(
+          this.props.user.authKey,
+          true
+        )
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -166,8 +175,9 @@ class MySettings extends React.Component {
 
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: false });
-        let resp = await notificationToggle(this.props.user.authKey, false);
+        let resp = await notificationToggle(this.props.user.authKey, false)
         console.log(resp, "resp");
+        OneSignal.disablePush(true);
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -189,6 +199,9 @@ class MySettings extends React.Component {
         private: resp.private,
         avatarUri: resp.avatarURI,
       });
+      console.log("********");
+      console.log(resp.username == "");
+      console.log("********");
     }
   }
   async updateInformation() {
@@ -207,30 +220,6 @@ class MySettings extends React.Component {
     if (this.state.showPersonal) {
       return (
         <View style={{ backgroundColor: "#d6d6d6", paddingHorizontal: "5%" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginHorizontal: "5%",
-            }}
-          >
-            <Icon name="user" type="entypo" size={20} color="black" />
-            <Text style={{ marginLeft: "2%" }}>
-              {this.props.translateText("setting.username")}:
-            </Text>
-            <Text style={{ marginLeft: "2%", color: "blue" }}>
-              {this.state.usernameConfirmed}
-            </Text>
-            <Icon
-              name="pencil"
-              type="evilicon"
-              size={20}
-              color="blue"
-              onPress={() => {
-                this.setState({ overlayVis: true, chosenEdit: "username" });
-              }}
-            />
-          </View>
           <View
             style={{
               flexDirection: "row",
@@ -709,7 +698,8 @@ class MySettings extends React.Component {
               <Switch
                 trackColor={{ false: "gray", true: "blue" }}
                 onValueChange={() => {
-                  this.notificationToggle();
+                  console.log("hi");
+                  this.notificationToggleLocal();
                 }}
                 value={this.state.notificationEnabled}
               />

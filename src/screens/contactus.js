@@ -21,6 +21,7 @@ import {
     MenuTrigger,
   } from 'react-native-popup-menu';
 
+  import { LogBox } from "react-native";
 class ContactUs extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +32,7 @@ this.state={bgColor:'black',inputText:'',chosenColor:'black',message:''}
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
 

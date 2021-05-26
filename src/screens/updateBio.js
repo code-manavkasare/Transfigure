@@ -13,6 +13,7 @@ import ImagePicker from 'react-native-image-picker';
 import {fetchDisplayName,fetchDisplayTitle,fetchMyBio,updateDisplayName,updateDisplayTitle,updateMyBio,setAvatar,getAvatar} from '../func/userSettings'
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import { LogBox } from "react-native";
 import {
     Menu,
     MenuOptions,
@@ -30,7 +31,7 @@ this.state={bgColor:'black',inputText:'',chosenColor:'black',avatarUri:'',displa
 
   }
   async componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
     this.setState({loading:true})
     await this.fetchInfo()
     await this.fetchAvatar()

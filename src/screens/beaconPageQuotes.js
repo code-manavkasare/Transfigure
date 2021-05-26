@@ -56,6 +56,7 @@ import {
   Thumbnail,
 } from "native-base";
 
+import { LogBox } from "react-native";
 class BeaconPageQuotes extends React.Component {
   constructor(props) {
     super(props);
@@ -74,7 +75,7 @@ class BeaconPageQuotes extends React.Component {
   }
 
   async componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
     this.setState({ loading: true });
     await this.fetchQuote();
     this.setState({ loading: false });

@@ -10,7 +10,8 @@ import {
   Dimensions,
   ScrollView,
   Text,
-  Platform
+  Platform,
+  LogBox
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -53,11 +54,12 @@ class BuildPage extends React.Component {
       searchFriendMyFriends: "",
       chooseMonthOverlayVis: false,
       chosenMonth: "",
+      friend: null,
     };
   }
 
   async componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
     this.setState({ loading: true });
     await this.fetchUser();
@@ -71,17 +73,20 @@ class BuildPage extends React.Component {
   }
   async getFullQuotes(uuID) {
     let quotes = null;
+    console.log("hi");
+    console.log(uuID);
     let resp = await getUserQuotes(this.props.user.authKey, uuID);
-    console.log(resp, 'test')
+    console.log(resp, "testZarish");
     if (resp) {
       quotes = resp.quotes;
-    }
 
-    this.setState({ quotes: quotes });
+      this.setState({ quotes: resp.quotes });
+    }
   }
   async fetchUser() {
+    this.setState({ friend: this.props.user.uuID });
     let username = "";
-    console.log('here here', this.props.user)
+    console.log("here here", this.props.user);
     if (this.props.route.params != undefined) {
       let resp = await getOneUser(
         this.props.user.authKey,
@@ -223,9 +228,17 @@ class BuildPage extends React.Component {
         key={index}
         onPress={() => {
           this.setState(
-            { pickFriendVis: !this.state.pickFriendVis, username: item.name },
+            {
+              pickFriendVis: !this.state.pickFriendVis,
+              username: item.name,
+              friend: item.uuID,
+            },
             async () => {
+              //await this.fetchUser();
               await this.getFullQuotes(item.uuID);
+              console.log("heeeee");
+              console.log(item);
+              console.log("yoooooo");
             }
           );
         }}
@@ -309,6 +322,7 @@ class BuildPage extends React.Component {
                     .searchPressedFindFriends,
                   searchFriendMyFriends: "",
                   pickFriendVis: !this.state.pickFriendVis,
+                  friend: this.props.user.uuID
                 },
                 () => {
                   this.filterFriends("");
@@ -333,7 +347,9 @@ class BuildPage extends React.Component {
           small={false}
           withMonth={true}
           chosenMonth={this.state.chosenMonth}
-          uuID={this.props.user.uuID}
+          uuID={
+            this.state.friend
+          }
         />
       );
     } else {
@@ -431,21 +447,21 @@ class BuildPage extends React.Component {
                 quotes={this.state.quotes}
                 parentProps={this.props}
                 small={true}
-                uuID={this.props.user.uuID}
+                uuID={this.state.friend}
               />
               <Calendars
                 width={0.96 * 0.25}
                 quotes={this.state.quotes}
                 parentProps={this.props}
                 small={true}
-                uuID={this.props.user.uuID}
+                uuID={this.state.friend}
               />
               <Calendars
                 width={0.96 * 0.25}
                 quotes={this.state.quotes}
                 parentProps={this.props}
                 small={true}
-                uuID={this.props.user.uuID}
+                uuID={this.state.friend}
               />
             </Svg>
           </View>
@@ -456,7 +472,7 @@ class BuildPage extends React.Component {
     }
   }
   render() {
-    console.log(this.props, 'user props')
+    console.log(this.props, "user props");
     return (
       <SafeAreaView style={styles.container}>
         {this.pickFriendOverlay()}
@@ -575,7 +591,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
     elevation: 20,
-    marginTop: Platform.OS !== 'ios' ? 30 : 0
+    marginTop: Platform.OS !== "ios" ? 30 : 0,
   },
   buttonLogin: {
     width: "50%",

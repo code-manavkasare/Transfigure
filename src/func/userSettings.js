@@ -287,7 +287,7 @@ export async function notificationToggle (authKey,notificationEnabled) {
         }),
         });      
         let json = await response.json();
-        
+        console.log(json)
         if(json.success){
             return json.success;
         }

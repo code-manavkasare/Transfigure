@@ -14,13 +14,8 @@ import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import {deleteUserAccount} from '../func/userSettings'
 
+import { LogBox } from "react-native";
 
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-  } from 'react-native-popup-menu';
 
 class SettingsDeleteAccount extends React.Component {
   constructor(props) {
@@ -33,7 +28,7 @@ reasons:[this.props.translateText("settingsDeleteAccount.concerned_data"),this.p
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
 
   }

@@ -8,6 +8,7 @@ import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
+import { LogBox } from "react-native";
 class SplashScreen extends React.Component {
   constructor(props) { 
     super(props);
@@ -16,7 +17,7 @@ class SplashScreen extends React.Component {
 
   async componentDidMount() {
 
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
     setTimeout(() => {
         this.props.navigation.reset({
             index: 0,
