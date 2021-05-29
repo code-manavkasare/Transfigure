@@ -152,7 +152,7 @@ class MySettings extends React.Component {
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: true });
         let resp = await notificationToggle(this.props.user.authKey, true);
-        await onesignalNotificationToggle(true);
+        await onesignalNotificationToggle(false);
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -169,7 +169,7 @@ class MySettings extends React.Component {
         await AsyncStorage.setItem("UserAccount", JSON.stringify(myObj));
         this.setState({ notificationEnabled: false });
         let resp = await notificationToggle(this.props.user.authKey, false);
-        await onesignalNotificationToggle(false);
+        await onesignalNotificationToggle(true);
         console.log(resp, "resp");
       } catch (error) {
         // Error retrieving data
