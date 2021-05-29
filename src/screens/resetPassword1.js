@@ -7,6 +7,7 @@ import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {sendCode} from '../func/resetpassword'
 
+import { LogBox } from "react-native";
 class ResetPassword1 extends React.Component {
   constructor(props) {
     super(props);
@@ -14,10 +15,8 @@ class ResetPassword1 extends React.Component {
   
   }
 
-
-  
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
  async handleSendCode(){

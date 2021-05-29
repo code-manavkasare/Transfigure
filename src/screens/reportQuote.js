@@ -19,6 +19,7 @@ import {
     MenuTrigger,
   } from 'react-native-popup-menu';
 
+  import { LogBox } from "react-native";
 class ReportQuote extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ reasons:[this.props.translateText("report.its_disrespectful"), this.props.transl
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 console.log(this.props.route.params)
 
   }

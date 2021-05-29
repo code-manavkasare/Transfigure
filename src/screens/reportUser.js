@@ -13,6 +13,7 @@ import ImagePicker from 'react-native-image-picker';
 import {reportQuote} from '../func/quotes'
 import {reportUser} from '../func/findUsers'
 
+import { LogBox } from "react-native";
 import {
     Menu,
     MenuOptions,
@@ -31,7 +32,7 @@ reasons:[this.props.translateText("report.inappropriate_profile"), this.props.tr
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
   showAvatar(){

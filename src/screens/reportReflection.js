@@ -12,6 +12,7 @@ import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import {reportReflection} from '../func/reflections'
 
+import { LogBox } from "react-native";
 import {
     Menu,
     MenuOptions,
@@ -30,7 +31,7 @@ reasons:[this.props.translateText("reportReflection.disrespectful_text"),this.pr
 
   }
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
   showAvatar(){

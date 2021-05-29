@@ -20,6 +20,7 @@ import {
     MenuOption,
     MenuTrigger,
   } from 'react-native-popup-menu';
+import { LogBox } from 'react-native'
 
 class SettingsMirrorReflection extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ this.state={inputText:'',chosenColor:'white',avatarUri:'',imagechosen:false,imag
 
   }
   async componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
     this.setState({loading:true}) 
     let resp=await fetchDisplayName(this.props.user.authKey)
     await this.fetchSet()

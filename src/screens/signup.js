@@ -15,6 +15,8 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+
+import { LogBox } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { updateKey, registerUser, translateText } from "../actions/user";
@@ -36,7 +38,7 @@ class Signup extends React.Component {
   }
 
   componentDidMount() {
-    console.disableYellowBox = true;
+    LogBox.ignoreAllLogs(true);
   }
   handlePressTerms() {
     Linking.canOpenURL(

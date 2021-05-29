@@ -7,6 +7,8 @@ import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {resetPassword} from '../func/resetpassword'
 import { HelperText } from 'react-native-paper';
+
+import { LogBox } from "react-native";
 class ResetPassword3 extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,7 @@ class ResetPassword3 extends React.Component {
 
   
   componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
   }
 async resetPassword(){

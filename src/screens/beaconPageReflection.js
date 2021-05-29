@@ -14,7 +14,7 @@ import {
   Switch,
   FlatList,
   ImageBackground,
-  Platform
+  Platform,
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -53,6 +53,7 @@ import {
 import { fetchSettingsInfo } from "../func/userSettings";
 import RBSheet from "react-native-raw-bottom-sheet";
 
+import { LogBox } from "react-native";
 import {
   Container,
   Content,
@@ -86,7 +87,7 @@ class BeaconPageReflection extends React.Component {
   }
 
   async componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
     await this.fetchReflection();
     await this.setTimezone();
   }

@@ -12,6 +12,7 @@ import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import {updatePassword,fetchSettingsInfo} from '../func/userSettings'
 
+import { LogBox } from "react-native";
 
 import {
     Menu,
@@ -30,7 +31,7 @@ this.state={bgColor:'black',inputText:'',chosenColor:'black',avatarUri:'',oldPas
 
   }
  async  componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 
     await this.getInformation()
   }

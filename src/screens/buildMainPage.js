@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   View,
@@ -11,7 +10,7 @@ import {
   Dimensions,
   ScrollView,
   Text,
-  Platform
+  Platform,
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -47,39 +46,46 @@ class BuildMainPage extends React.Component {
     super(props);
     this.state = {
       posts: [],
-      loading: false
+      loading: false,
     };
   }
 
   getRandomColor() {
-	  var letters = '0123456789ABCDEF';
-	  var color = '#';
-	  for (var i = 0; i < 6; i++) {
-	    color += letters[Math.floor(Math.random() * 16)];
-	  }
-	  return color;
-	}
+    var letters = "0123456789ABCDEF";
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
-	async componentWillMount() {
-		this.props.navigation.addListener('focus', async () => {
+  async componentWillMount() {
+    this.props.navigation.addListener("focus", async () => {
       this.setState({ loading: true });
-	    await this.getFullQuotes();
-	    this.setState({ loading: false });
+      await this.getFullQuotes();
+      this.setState({ loading: false });
     });
 
-    this.props.navigation.addListener('blur', async () => {
+    this.props.navigation.addListener("blur", async () => {
       //this.setState({posts: []})
     });
   }
 
-	async getFullQuotes() {
+  async getFullQuotes() {
     let posts = null;
     let uuID = this.props.route.params.uuID;
 
-    console.log(uuID, 'uuID')
+    console.log(uuID, "uuID");
 
-    let resp = await getUserPostsOfDay(this.props.user.authKey, uuID, this.props.route.params.date);
-    console.log(resp, 'resp test')
+    console.log(this.props.user.authKey, "key");
+    console.log(this.props.route.params.date, "date");
+
+    let resp = await getUserPostsOfDay(
+      this.props.user.authKey,
+      uuID,
+      this.props.route.params.date
+    );
+    console.log(resp, "resp test");
     if (resp) {
       posts = resp.posts;
     }
@@ -88,91 +94,135 @@ class BuildMainPage extends React.Component {
   }
 
   renderText(text) {
-  	let maxlimit = 50;
-		return <Text style={{padding: 5}}>{ ((text).length > maxlimit) ? 
-		  (((text).substring(0,maxlimit-3)) + '...') : text }
-			</Text>
+    let maxlimit = 50;
+    return (
+      <Text style={{ padding: 5 }}>
+        {text.length > maxlimit
+          ? text.substring(0, maxlimit - 3) + "..."
+          : text}
+      </Text>
+    );
   }
 
   renderAllBuilds() {
-  	let {posts} = this.state;
+    let { posts } = this.state;
 
-  	console.log(posts, 'posts test')
+    console.log(posts, "posts test");
 
-  	if (posts && posts.length) {
-  		return posts.map((item, i) => {
-  			if (i === 0) {
-  				return <View style={styles.mainBuild} key={i}>
-      			<TouchableOpacity style={[styles.innerBuildCon, !item.imageURI.length && {alignItems: 'center', justifyContent: 'center'}]} onPress={() => this.goToDetail(item.quoteID)}>
-      				{item.imageURI.length && <View style={styles.imageBox}>
-      				      					<Image source={{uri: item.imageURI[0]}} style={styles.imageItem} />
-      				      				</View>}
-      				{this.renderText(item.quoteText)}
-      				<View style={styles.commentsSection}>
-      					<Icon
-	                name="comment"
-	                type="material-community"
-	                size={13}
-	                style={styles.commentIcon}
-	                color="gray"
-	              />
-      					<Text style={styles.commentText}>{item.comments.length}</Text>
-      					<Icon
-	                name="heart"
-	                type="font-awesome"
-	                size={13}
-	                style={styles.commentIcon}
-	                color="gray"
-	              />
-      					<Text style={styles.commentText}>{item.likes}</Text>
-      				</View>
-      			</TouchableOpacity>
-      		</View>
-  			} else {
-  				return 	<View style={styles.otherBuild} key={i}>
-      			<TouchableOpacity style={[styles.innerBuildCon, {borderColor: this.getRandomColor()}, !item.imageURI.length && {alignItems: 'center', justifyContent: 'center'}]} onPress={() => this.goToDetail(item.quoteID)}>
-      				{item.imageURI.length && <View style={styles.imageBox}>
-      				      					<Image source={{uri: item.imageURI[0]}} style={styles.imageItem} />
-      				      				</View>}
-      				{this.renderText(item.quoteText)}
-      				<View style={styles.commentsSection}>
-      					<Icon
-	                name="comment"
-	                type="material-community"
-	                size={13}
-	                style={styles.commentIcon}
-	                color="gray"
-	              />
-      					<Text style={styles.commentText}>{item.comments.length}</Text>
-      					<Icon
-	                name="heart"
-	                type="font-awesome"
-	                size={13}
-	                style={styles.commentIcon}
-	                color="gray"
-	              />
-      					<Text style={styles.commentText}>{item.likes}</Text>
-      				</View>
-      			</TouchableOpacity>
-      		</View>
-  			}
-  		})
-  	} else if(!this.state.loading) {
-  		return <View style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', width: '100%'}}>	
-  			<Text style={{fontSize: 20, textAlign: 'center', marginTop: 30}}>No Build Found</Text>
-  		</View>
-  	}
+    if (posts && posts.length) {
+      return posts.map((item, i) => {
+        var src = item.imageURI[0]
+        ? { uri: item.imageURI[0] }
+        : require("../images/Quote.png");
+        if (i === 0) {
+         
+          return (
+            <View style={styles.mainBuild} key={i}>
+              <TouchableOpacity
+                style={[
+                  styles.innerBuildCon,
+                  {
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                ]}
+                onPress={() => this.goToDetail(item.quoteID)}
+              >
+                <View style={styles.imageBox}>
+                  <Image source={src} style={styles.imageItem} />
+                </View>
+
+                {this.renderText(item.quoteText)}
+                <View style={styles.commentsSection}>
+                  <Icon
+                    name="comment"
+                    type="material-community"
+                    size={13}
+                    style={styles.commentIcon}
+                    color="gray"
+                  />
+                  <Text style={styles.commentText}>{item.comments.length}</Text>
+                  <Icon
+                    name="heart"
+                    type="font-awesome"
+                    size={13}
+                    style={styles.commentIcon}
+                    color="gray"
+                  />
+                  <Text style={styles.commentText}>{item.likes}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        } else {
+          return (
+            <View style={styles.otherBuild} key={i}>
+              <TouchableOpacity
+                style={[
+                  styles.innerBuildCon,
+                  {
+                    borderColor: this.getRandomColor(),
+
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                ]}
+                onPress={() => this.goToDetail(item.quoteID)}
+              >
+                <View style={styles.imageBox}>
+                  <Image source={src} style={styles.imageItem} />
+                </View>
+
+                {this.renderText(item.quoteText)}
+                <View style={styles.commentsSection}>
+                  <Icon
+                    name="comment"
+                    type="material-community"
+                    size={13}
+                    style={styles.commentIcon}
+                    color="gray"
+                  />
+                  <Text style={styles.commentText}>{item.comments.length}</Text>
+                  <Icon
+                    name="heart"
+                    type="font-awesome"
+                    size={13}
+                    style={styles.commentIcon}
+                    color="gray"
+                  />
+                  <Text style={styles.commentText}>{item.likes}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        }
+      });
+    } else if (!this.state.loading) {
+      return (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <Text style={{ fontSize: 20, textAlign: "center", marginTop: 30 }}>
+            No Build Found
+          </Text>
+        </View>
+      );
+    }
   }
 
   goToDetail(id) {
-  	this.props.navigation.navigate("ShowQuote", {
-      quoteID: id
+    this.props.navigation.navigate("ShowQuote", {
+      quoteID: id,
     });
   }
 
-  
   render() {
-  	console.log(this.props, 'props')
+    console.log(this.props, "props");
     return (
       <SafeAreaView style={styles.container}>
         <Spinner
@@ -232,13 +282,12 @@ class BuildMainPage extends React.Component {
                 fontWeight: "bold",
               }}
             >
-              BUILDS({moment(this.props.route.params.date).format('DD-MM-YYYY')})
+              BUILDS({moment(this.props.route.params.date).format("DD-MM-YYYY")}
+              )
             </Text>
           </View>
           <ScrollView>
-          	<View style={styles.buildCon}>
-          		{this.renderAllBuilds()}
-          	</View>
+            <View style={styles.buildCon}>{this.renderAllBuilds()}</View>
           </ScrollView>
         </View>
         <MyFooter parentProps={this.props} />
@@ -264,56 +313,55 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
     elevation: 20,
-    marginTop: Platform.OS !== 'ios' ? 30 : 0
+    marginTop: Platform.OS !== "ios" ? 30 : 0,
   },
-  buildCon:{
-  	flexDirection: 'row',
-  	flexWrap: 'wrap',
-  	padding: 2.5
+  buildCon: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    padding: 2.5,
   },
   mainBuild: {
-  	width: '100%',
-  	height: 150,
-  	padding: 5
+    width: "100%",
+    height: 150,
+    padding: 5,
   },
-  otherBuild:{
-  	width: '50%',
-  	height: 150,
-  	padding: 5
+  otherBuild: {
+    width: "50%",
+    height: 150,
+    padding: 5,
   },
   innerBuildCon: {
-  	width: '100%',
-  	height: '100%',
-  	borderWidth: 3,
-  	//alignItems: 'center',
-  	//justifyContent: 'center',
-  	borderColor: '#ed6e62',
+    width: "100%",
+    height: "100%",
+    borderWidth: 3,
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    borderColor: "#ed6e62",
   },
   commentsSection: {
-  	position: 'absolute',
-  	bottom: 5,
-  	right: 5,
-  	flexDirection: 'row'
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    flexDirection: "row",
   },
-  commentText:{
-  	top: -2,
-  	marginLeft: 2,
-  	fontSize: 13
+  commentText: {
+    top: -2,
+    marginLeft: 2,
+    fontSize: 13,
   },
   commentIcon: {
-  	marginLeft: 8,
-  	color: 'gray'
+    marginLeft: 8,
+    color: "gray",
   },
   imageBox: {
-  	backgroundColor: '#e9eaec',
-  	height: 80,
-  	width: '100%'
+    backgroundColor: "#e9eaec",
+    height: 80,
+    width: "100%",
   },
   imageItem: {
-  	width: '100%',
-  	height: '100%'
-  }
-  
+    width: "100%",
+    height: "100%",
+  },
 });
 
 const mapDispatchToProps = (dispatch) => {

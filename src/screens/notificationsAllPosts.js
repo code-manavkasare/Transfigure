@@ -18,6 +18,7 @@ import { getAllPostsNotifications,getNotifLength,deleteNotification } from '../f
 import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail} from 'native-base';
 
 
+import { LogBox } from "react-native";
 class NotificationsAllPosts extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,7 @@ this.state={notifications:[],loading:false,timezone:'Europe/Belfast',lengthOfAll
   }
 
 async  componentDidMount() {
-    console.disableYellowBox = true;
+     LogBox.ignoreAllLogs(true);
 this.setState({loading:true})
 await this.setTimezone()
 await this.fetchNotifications()
