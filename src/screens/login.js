@@ -29,7 +29,6 @@ import { loginUser } from "../func/userSettings";
 import { Svg, Polyline, Circle } from "react-native-svg";
 // import { PowerTranslator, ProviderTypes, TranslatorConfiguration, TranslatorFactory } from 'react-native-power-translator';
 
-import { LogBox } from "react-native";
 // TranslatorConfiguration.setConfig(ProviderTypes.Google, 'AIzaSyCf6Q7WZT0ZUjQcaYPE50C80qMJh9hGdkg','fr');
 
 class Login extends React.Component {
@@ -40,7 +39,6 @@ class Login extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     // const translator = TranslatorFactory.createTranslator();
     // console.log(translator,"translator")
     // translator.translate('Engineering physics or engineering science').then(translated => {

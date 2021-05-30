@@ -29,7 +29,6 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { Header, Icon, Overlay, Avatar } from "react-native-elements";
 import { SliderBox } from "react-native-image-slider-box";
 
-import { LogBox } from "react-native";
 import {
   Menu,
   MenuOptions,
@@ -59,7 +58,6 @@ class CreatePost extends React.Component {
     };
   }
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     this.setState({ loading: true });
     let resp = await fetchDisplayName(this.props.user.authKey);
     await this.fetchSet();

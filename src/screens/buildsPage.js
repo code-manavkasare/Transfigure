@@ -11,7 +11,7 @@ import {
   ScrollView,
   Text,
   Platform,
-  LogBox
+  LogBox,
 } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -59,8 +59,6 @@ class BuildPage extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
-
     this.setState({ loading: true });
     await this.fetchUser();
     await this.fetchMyFriends();
@@ -322,7 +320,7 @@ class BuildPage extends React.Component {
                     .searchPressedFindFriends,
                   searchFriendMyFriends: "",
                   pickFriendVis: !this.state.pickFriendVis,
-                  friend: this.props.user.uuID
+                  friend: this.props.user.uuID,
                 },
                 () => {
                   this.filterFriends("");
@@ -347,9 +345,7 @@ class BuildPage extends React.Component {
           small={false}
           withMonth={true}
           chosenMonth={this.state.chosenMonth}
-          uuID={
-            this.state.friend
-          }
+          uuID={this.state.friend}
         />
       );
     } else {

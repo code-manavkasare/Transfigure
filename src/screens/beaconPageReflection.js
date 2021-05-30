@@ -53,7 +53,6 @@ import {
 import { fetchSettingsInfo } from "../func/userSettings";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-import { LogBox } from "react-native";
 import {
   Container,
   Content,
@@ -82,12 +81,11 @@ class BeaconPageReflection extends React.Component {
       replies: [],
       chosenReplyID: "",
       searchTreeKey: "",
-      chosenTotalData: []
+      chosenTotalData: [],
     };
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     await this.fetchReflection();
     await this.setTimezone();
   }
@@ -382,7 +380,7 @@ class BeaconPageReflection extends React.Component {
               <Text style={{ fontSize: 12, marginLeft: 10 }}>{addedat}</Text>
             </View>
             <Text style={{ textAlign: "justify", marginRight: "10%" }}>
-              {(item.replyText).split('_')[0]}
+              {item.replyText.split("_")[0]}
             </Text>
           </View>
         </View>
@@ -393,35 +391,27 @@ class BeaconPageReflection extends React.Component {
 
   renderCommentsOfComment() {
     let data = this.state.replies;
-    if (this.state.searchTreeKey == '' && data) {
+    if (this.state.searchTreeKey == "" && data) {
       let beforeReverse = data.replies;
       let afterReverse = [].concat(beforeReverse);
       return (
         <View>
-          {afterReverse.map((item, i) =>
-            ((typeof item === 'object') && (item.replyText).search(data.addedAt) >= 0) &&
-            this.renderOneCommentOfComment(
-              item,
-              i,
-              data
-            )
+          {afterReverse.map(
+            (item, i) =>
+              typeof item === "object" &&
+              item.replyText.search(data.addedAt) >= 0 &&
+              this.renderOneCommentOfComment(item, i, data)
           )}
         </View>
       );
     }
 
-    if (this.state.searchTreeKey != '' && data) {
-         return (
-          <View>
-            {data.map((item, i) =>
-              this.renderOneCommentOfComment(
-                item,
-                i,
-                data
-              )
-            )}
-          </View>
-        );
+    if (this.state.searchTreeKey != "" && data) {
+      return (
+        <View>
+          {data.map((item, i) => this.renderOneCommentOfComment(item, i, data))}
+        </View>
+      );
     }
   }
 
@@ -451,12 +441,12 @@ class BeaconPageReflection extends React.Component {
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: "2%" }}
           onPress={() => {
-            this.setState({chosenCommentID: data.commentID})
+            this.setState({ chosenCommentID: data.commentID });
             this.setState({
               commentOverlayVis: true,
               chosenCommentType: 1,
-              chosenReplyID: data.addedAt
-            })
+              chosenReplyID: data.addedAt,
+            });
           }}
         >
           <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" />
@@ -505,12 +495,15 @@ class BeaconPageReflection extends React.Component {
   async handleAddComment() {
     // type 0-comment quote type 1-reply to comment
     if (this.state.chosenCommentType == 1) {
-      console.log("test_reply========================>", this.state.chosenCommentID)
-      console.log( (this.state.comment + "_" + (this.state.chosenReplyID)))
+      console.log(
+        "test_reply========================>",
+        this.state.chosenCommentID
+      );
+      console.log(this.state.comment + "_" + this.state.chosenReplyID);
       this.setState({ loading: true, commentOverlayVis: false });
       let resp = await replyToCommentReflection(
         this.props.user.authKey,
-        (this.state.comment + "_" + (this.state.chosenReplyID)),
+        this.state.comment + "_" + this.state.chosenReplyID,
         this.state.chosenCommentID
       );
 
@@ -534,7 +527,11 @@ class BeaconPageReflection extends React.Component {
   }
 
   showTreeRespectDislikeComment(data, item) {
-    let treeData = (typeof this.state.chosenTotalData === 'object') && this.state.chosenTotalData.filter(tree => tree.replyText.search(item.addedAt) >= 0 )
+    let treeData =
+      typeof this.state.chosenTotalData === "object" &&
+      this.state.chosenTotalData.filter(
+        (tree) => tree.replyText.search(item.addedAt) >= 0
+      );
     return (
       <View
         style={{
@@ -562,7 +559,7 @@ class BeaconPageReflection extends React.Component {
             this.setState({
               commentOverlayVis: true,
               chosenCommentType: 1,
-              chosenReplyID: item.addedAt
+              chosenReplyID: item.addedAt,
             })
           }
         >
@@ -584,9 +581,9 @@ class BeaconPageReflection extends React.Component {
           <TouchableOpacity
             style={{ marginLeft: "20%", marginVertical: "2%" }}
             onPress={() => {
-              console.log("??????????????????????", this.state.chosenCommentID)
-              this.showReplies(treeData)
-              this.setState({ searchTreeKey: item.addedAt })
+              console.log("??????????????????????", this.state.chosenCommentID);
+              this.showReplies(treeData);
+              this.setState({ searchTreeKey: item.addedAt });
             }}
           >
             <Text style={{ fontSize: 13, color: "red", fontWeight: "700" }}>
@@ -608,7 +605,13 @@ class BeaconPageReflection extends React.Component {
               this.handleDislikeComment(data);
             }}
           >
-            <Icon name="ios-heart" type="ionicon" size={15} color="red" style={{ marginLeft: "15%" }} />
+            <Icon
+              name="ios-heart"
+              type="ionicon"
+              size={15}
+              color="red"
+              style={{ marginLeft: "15%" }}
+            />
             <Text
               style={{
                 fontWeight: "bold",
@@ -631,7 +634,13 @@ class BeaconPageReflection extends React.Component {
             this.handleLikeComment(data);
           }}
         >
-          <Icon name="ios-heart" type="ionicon" size={15} color="#3f32d2" style={{ marginLeft: "15%" }} />
+          <Icon
+            name="ios-heart"
+            type="ionicon"
+            size={15}
+            color="#3f32d2"
+            style={{ marginLeft: "15%" }}
+          />
           <Text
             style={{
               fontWeight: "bold",
@@ -782,7 +791,7 @@ class BeaconPageReflection extends React.Component {
               <Text style={{ fontSize: 10, marginLeft: "10%" }}>{addedat}</Text>
             </View>
             <Text style={{ textAlign: "justify", marginRight: "10%" }}>
-              {(data.commentText).split('_')[0]}
+              {data.commentText.split("_")[0]}
             </Text>
             {this.renderLikesCommentsNumberReply(data)}
           </View>
@@ -791,10 +800,10 @@ class BeaconPageReflection extends React.Component {
           <TouchableOpacity
             style={{ marginLeft: "20%", marginVertical: "2%" }}
             onPress={() => {
-              this.showReplies(data)
-              this.setState({ searchTreeKey: "" })
-              this.setState({chosenCommentID: data.commentID})
-              this.setState({chosenTotalData: data.replies})
+              this.showReplies(data);
+              this.setState({ searchTreeKey: "" });
+              this.setState({ chosenCommentID: data.commentID });
+              this.setState({ chosenTotalData: data.replies });
             }}
           >
             <Text style={{ fontSize: 13, color: "red", fontWeight: "700" }}>
@@ -833,9 +842,7 @@ class BeaconPageReflection extends React.Component {
             {/* <Text style={styles.mainHeadingText}>Replies ###+++</Text> */}
             <Text style={styles.mainHeadingText}>Replies</Text>
           </View>
-          <ScrollView>
-            {this.renderCommentsOfComment()}
-          </ScrollView>
+          <ScrollView>{this.renderCommentsOfComment()}</ScrollView>
         </RBSheet>
       </View>
     );
@@ -994,10 +1001,7 @@ class BeaconPageReflection extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          <ScrollView>
-            {this.showReflection()}
-            
-          </ScrollView>
+          <ScrollView>{this.showReflection()}</ScrollView>
         </View>
 
         <MyFooter parentProps={this.props} />

@@ -16,7 +16,6 @@ import {
   Platform,
 } from "react-native";
 
-import { LogBox } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { updateKey, registerUser, translateText } from "../actions/user";
@@ -37,9 +36,7 @@ class Signup extends React.Component {
     };
   }
 
-  componentDidMount() {
-    LogBox.ignoreAllLogs(true);
-  }
+  componentDidMount() {}
   handlePressTerms() {
     Linking.canOpenURL(
       "https://www.websitepolicies.com/policies/view/rrpx4LOY"

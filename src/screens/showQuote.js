@@ -14,7 +14,6 @@ import {
   Platform,
 } from "react-native";
 
-import { LogBox } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
@@ -83,7 +82,6 @@ class ShowQuote extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     this.setState({ loading: true });
     let quote = await getOneQuote(
       this.props.user.authKey,

@@ -16,7 +16,6 @@ import {
   View,
 } from "react-native";
 
-import { LogBox } from "react-native";
 import CountryPicker from "react-native-country-picker-modal";
 import { Avatar, Icon, Overlay } from "react-native-elements";
 import OneSignal from "react-native-onesignal";
@@ -77,7 +76,6 @@ class MySettings extends React.Component {
   }
 
   async componentDidMount() {
-    LogBox.ignoreAllLogs(true);
     await this.getInformation();
     await this.checkStorage();
   }

@@ -56,7 +56,6 @@ import {
   Thumbnail,
 } from "native-base";
 
-import { LogBox } from "react-native";
 class BeaconPageQuotes extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +74,6 @@ class BeaconPageQuotes extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     this.setState({ loading: true });
     await this.fetchQuote();
     this.setState({ loading: false });
@@ -115,20 +113,26 @@ class BeaconPageQuotes extends React.Component {
       let user = null;
       let avBase64 = null;
 
-      console.log("fetch quote")
+      console.log("fetch quote");
 
-      if (resp != null
-        && (
-        ((resp.quote.quoteText[0] == '\u0022') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u0022'))||
-        ((resp.quote.quoteText[0] == '\u0027') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u0027'))||
-        ((resp.quote.quoteText[0] == '\u2018') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u2019'))||
-        ((resp.quote.quoteText[0] == '\u201C') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u201D'))||
-        ((resp.quote.quoteText[0] == '\u201E') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u201F'))
-      )
+      if (
+        resp != null &&
+        ((resp.quote.quoteText[0] == "\u0022" &&
+          resp.quote.quoteText[resp.quote.quoteText.length - 1] == "\u0022") ||
+          (resp.quote.quoteText[0] == "\u0027" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u0027") ||
+          (resp.quote.quoteText[0] == "\u2018" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u2019") ||
+          (resp.quote.quoteText[0] == "\u201C" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u201D") ||
+          (resp.quote.quoteText[0] == "\u201E" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] == "\u201F"))
       ) {
-
-        console.log((resp.quote.quoteText[resp.quote.quoteText.length-1]))
-        console.log(resp.quote.quoteText[0])
+        console.log(resp.quote.quoteText[resp.quote.quoteText.length - 1]);
+        console.log(resp.quote.quoteText[0]);
 
         user = resp.currentUser;
 
@@ -147,31 +151,37 @@ class BeaconPageQuotes extends React.Component {
         );
       }
 
-       if (resp != null
-        && !(
-        ((resp.quote.quoteText[0] == '\u0022') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u0022'))||
-        ((resp.quote.quoteText[0] == '\u0027') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u0027'))||
-        ((resp.quote.quoteText[0] == '\u2018') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u2019'))||
-        ((resp.quote.quoteText[0] == '\u201C') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u201D'))||
-        ((resp.quote.quoteText[0] == '\u201E') && (resp.quote.quoteText[resp.quote.quoteText.length-1] == '\u201F'))
-      )
-      ) { 
-        
+      if (
+        resp != null &&
+        !(
+          (resp.quote.quoteText[0] == "\u0022" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u0022") ||
+          (resp.quote.quoteText[0] == "\u0027" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u0027") ||
+          (resp.quote.quoteText[0] == "\u2018" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u2019") ||
+          (resp.quote.quoteText[0] == "\u201C" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] ==
+              "\u201D") ||
+          (resp.quote.quoteText[0] == "\u201E" &&
+            resp.quote.quoteText[resp.quote.quoteText.length - 1] == "\u201F")
+        )
+      ) {
         this.setState({ quoteOffset: this.state.quoteOffset + 1 }, async () => {
-
           await this.fetchQuote();
         });
       }
 
-       if (resp == null && this.state.quoteOffset > 0) {
+      if (resp == null && this.state.quoteOffset > 0) {
         this.setState({ quoteOffset: this.state.quoteOffset - 1 }, async () => {
           await this.fetchQuote();
-
         });
       }
     } else {
       this.setState({ quoteOffset: this.state.quoteOffset + 1 }, async () => {
-
         await this.fetchQuote();
       });
     }
@@ -849,7 +859,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
     elevation: 20,
-    marginTop: Platform.OS !== 'ios' ? 30 : 0
+    marginTop: Platform.OS !== "ios" ? 30 : 0,
   },
 });
 

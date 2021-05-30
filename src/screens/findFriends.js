@@ -49,7 +49,6 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { Thumbnail, Badge } from "native-base";
 import moment from "moment";
 
-import { LogBox } from "react-native";
 class FindFriends extends React.Component {
   constructor(props) {
     super(props);
@@ -69,7 +68,6 @@ class FindFriends extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     this.setState({ loading: true });
     let resp = await getFriends(this.props.user.authKey);
     await this.fetchNewFriends();

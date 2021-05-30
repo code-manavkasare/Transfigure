@@ -48,7 +48,6 @@ import { Svg, Polyline, Circle, parse } from "react-native-svg";
 import Calendars from "../components/calendars";
 import { getAvatar } from "../func/userSettings";
 
-import { LogBox } from "react-native";
 class UserPage extends React.Component {
   constructor(props) {
     super(props);
@@ -66,7 +65,6 @@ class UserPage extends React.Component {
   }
 
   async componentDidMount() {
-     LogBox.ignoreAllLogs(true);
     console.log("here");
     this.fetchUser();
   }

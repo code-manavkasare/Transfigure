@@ -27,16 +27,13 @@ import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { checkCode } from "../func/resetpassword";
 
-import { LogBox } from "react-native";
 class ResetPassword2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { code: "" };
   }
 
-  componentDidMount() {
-     LogBox.ignoreAllLogs(true);
-  }
+  componentDidMount() {}
   async checkCode() {
     let resp = await checkCode(this.state.code, this.props.route.params.email);
     if (resp) {

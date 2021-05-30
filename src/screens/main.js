@@ -28,7 +28,6 @@ import PushNotification from "react-native-push-notification";
 import NotifService from "../func/notificationService";
 
 import OneSignal from "react-native-onesignal";
-import { LogBox } from "react-native";
 
 class Main extends React.Component {
   constructor(props) {
@@ -147,7 +146,7 @@ class Main extends React.Component {
   }
   async componentDidMount() {
     setTimeout(() => this.init(), 3000);
-    LogBox.ignoreAllLogs(true);
+
     let resp = await fetchSettingsInfo(this.props.user.authKey);
     let name = "USER'S";
     if (resp) {
