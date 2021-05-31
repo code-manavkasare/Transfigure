@@ -173,6 +173,7 @@ class ShowQuote extends React.Component {
           <TouchableOpacity
             style={{ borderRadius: 10 }}
             onPress={() => {
+              this.RBSheet.close();
               this.props.navigation.navigate("UserPage", {
                 uuID: this.state.myQuote.addedByUuid,
               });
@@ -187,6 +188,7 @@ class ShowQuote extends React.Component {
           <TouchableOpacity
             style={{ borderRadius: 10 }}
             onPress={() => {
+              this.RBSheet.close();
               this.props.navigation.navigate("UserPage", {
                 uuID: this.state.myQuote.addedByUuid,
               });

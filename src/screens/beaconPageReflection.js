@@ -53,6 +53,8 @@ import {
 import { fetchSettingsInfo } from "../func/userSettings";
 import RBSheet from "react-native-raw-bottom-sheet";
 
+const { width, height } = Dimensions.get("screen");
+
 import {
   Container,
   Content,
@@ -416,17 +418,17 @@ class BeaconPageReflection extends React.Component {
   }
 
   renderLikesCommentsNumberReply(data) {
-    let likes = data.likes;
-    let comments = data.replies.length;
+    console.log("renderLikesCommentsNumberReply", data);
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          alignSelf: "flex-start",
-        }}
-      >
-        {/* <Icon name="comment" type="material-community" size={15} color="gray" />
+      data && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            alignSelf: "flex-start",
+          }}
+        >
+          {/* <Icon name="comment" type="material-community" size={15} color="gray" />
         <Text
           style={{ fontWeight: "bold", marginLeft: "2%", marginRight: "5%" }}
         >
@@ -438,7 +440,38 @@ class BeaconPageReflection extends React.Component {
         >
           {likes}
         </Text> */}
-        <TouchableOpacity
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              // marginLeft: "5%",
+              marginVertical: 5,
+              paddingBottom: 15,
+              borderBottomWidth: 0.5,
+              borderBottomColor: "rgba(33,33,33,0.3)",
+              width: width,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                console.log("data", data);
+                this.setState({ chosenCommentID: data.commentID });
+                this.setState({
+                  commentOverlayVis: true,
+                  chosenCommentType: 1,
+                  chosenReplyID: data.addedAt,
+                });
+                this.showReplies(data);
+              }}
+            >
+              <Text style={{ color: "#3f32d2", fontSize: 14, marginRight: 20 }}>
+                {data.replies.length === 1
+                  ? `${data.replies.length} REPLY`
+                  : `${data.replies.length} REPLIES`}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {/* <TouchableOpacity
           style={{ flexDirection: "row", marginRight: "2%" }}
           onPress={() => {
             this.setState({ chosenCommentID: data.commentID });
@@ -449,7 +482,7 @@ class BeaconPageReflection extends React.Component {
             });
           }}
         >
-          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" />
+          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" /> */}
           {/* <Text
             style={{
               fontWeight: "bold",
@@ -462,9 +495,10 @@ class BeaconPageReflection extends React.Component {
             <Text>PP</Text>
             {this.props.translateText("showQuote.reply")}
           </Text> */}
-        </TouchableOpacity>
-        {/* {this.showRespectDislikeComment(data)} */}
-      </View>
+          {/* </TouchableOpacity> */}
+          {/* {this.showRespectDislikeComment(data)} */}
+        </View>
+      )
     );
   }
 
@@ -553,7 +587,7 @@ class BeaconPageReflection extends React.Component {
         >
           {likes}
         </Text> */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ flexDirection: "row", marginRight: "2%" }}
           onPress={() =>
             this.setState({
@@ -563,8 +597,8 @@ class BeaconPageReflection extends React.Component {
             })
           }
         >
-          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" />
-          {/* <Text
+          <Icon name="reply" type="font-awesome" size={15} color="#3f32d2" /> */}
+        {/* <Text
             style={{
               fontWeight: "bold",
               color: "#3f32d2",
@@ -575,9 +609,9 @@ class BeaconPageReflection extends React.Component {
           >
             {this.props.translateText("showQuote.reply")}
           </Text> */}
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
         {/* {this.showRespectDislikeComment(data)} */}
-        {treeData.length ? (
+        {/* {treeData.length ? (
           <TouchableOpacity
             style={{ marginLeft: "20%", marginVertical: "2%" }}
             onPress={() => {
@@ -590,7 +624,7 @@ class BeaconPageReflection extends React.Component {
               {treeData.length} REPLIES
             </Text>
           </TouchableOpacity>
-        ) : null}
+        ) : null} */}
       </View>
     );
   }
@@ -714,6 +748,7 @@ class BeaconPageReflection extends React.Component {
             backgroundColor: bgColor ? "#f2f2f2" : "#fff",
           }}
           onPress={() => {
+            this.RBSheet.close();
             this.props.navigation.navigate("UserPage", { uuID: uuID });
           }}
         >
@@ -735,6 +770,7 @@ class BeaconPageReflection extends React.Component {
             backgroundColor: bgColor ? "#f2f2f2" : "#fff",
           }}
           onPress={() => {
+            this.RBSheet.close();
             this.props.navigation.navigate("UserPage", { uuID: uuID });
           }}
         >
@@ -796,22 +832,6 @@ class BeaconPageReflection extends React.Component {
             {this.renderLikesCommentsNumberReply(data)}
           </View>
         </View>
-        {data.replies.length ? (
-          <TouchableOpacity
-            style={{ marginLeft: "20%", marginVertical: "2%" }}
-            onPress={() => {
-              this.showReplies(data);
-              this.setState({ searchTreeKey: "" });
-              this.setState({ chosenCommentID: data.commentID });
-              this.setState({ chosenTotalData: data.replies });
-            }}
-          >
-            <Text style={{ fontSize: 13, color: "red", fontWeight: "700" }}>
-              {/* {data.replies.length} 22REPLIES */}
-              {data.replies.length}REPLIES
-            </Text>
-          </TouchableOpacity>
-        ) : null}
       </View>
     );
   }
@@ -831,6 +851,92 @@ class BeaconPageReflection extends React.Component {
           ref={(ref) => {
             this.RBSheet = ref;
           }}
+          height={height * 0.75}
+          closeOnDragDown={true}
+          openDuration={250}
+          customStyles={{
+            container: {},
+          }}
+        >
+          <View style={styles.mainHeading}>
+            <Text style={styles.mainHeadingText}>Replies</Text>
+          </View>
+          {this.state.replies && (
+            <View
+              style={{
+                flexDirection: "row",
+                backgroundColor: "#f2f2f2",
+                paddingVertical: 20,
+                paddingLeft: 15,
+              }}
+            >
+              {this.showAvatar(
+                this.state.replies.avatarURI,
+                this.state.replies.addedByUuid
+              )}
+              <View style={{ marginHorizontal: "5%" }}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 14 }}>
+                    {this.state.replies.username}
+                  </Text>
+                  <Text style={{ fontSize: 10, marginLeft: "10%" }}>
+                    {this.state.replies.addedat}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    textAlign: "justify",
+                    marginLeft: -2,
+                    marginRight: "10%",
+                  }}
+                >
+                  {this.state.replies.commentText}
+                </Text>
+                {/* {this.renderLikesCommentsNumberReply(this.state.replies)} */}
+              </View>
+            </View>
+          )}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <TextInput
+              style={{
+                backgroundColor: "#fff",
+                paddingVertical: 20,
+                paddingHorizontal: 20,
+                borderBottomColor: "rgba(30,30,30,0.3)",
+                borderBottomWidth: 0.5,
+                width: width * 0.85,
+                color: "#000",
+              }}
+              placeholder="Type your reply here..."
+              placeholderTextColor="grey"
+              value={this.state.comment}
+              onChangeText={(value) => this.setState({ comment: value })}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                // if (this.state.comment.length > 0) {
+                console.log("adding comment");
+                this.handleAddComment();
+                // }
+              }}
+              style={{ marginRight: 10 }}
+            >
+              <Text style={{ color: "#3f32d2" }}>Send</Text>
+            </TouchableOpacity>
+          </View>
+
+          {this.renderCommentsOfComment()}
+        </RBSheet>
+        {/* <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
           height={400}
           closeOnDragDown={true}
           openDuration={250}
@@ -840,10 +946,10 @@ class BeaconPageReflection extends React.Component {
         >
           <View style={styles.mainHeading}>
             {/* <Text style={styles.mainHeadingText}>Replies ###+++</Text> */}
-            <Text style={styles.mainHeadingText}>Replies</Text>
-          </View>
-          <ScrollView>{this.renderCommentsOfComment()}</ScrollView>
-        </RBSheet>
+        {/* <Text style={styles.mainHeadingText}>Replies</Text>
+          </View> */}
+        {/* <ScrollView>{this.renderCommentsOfComment()}</ScrollView> */}
+        {/* </RBSheet> */}
       </View>
     );
   }
@@ -898,7 +1004,7 @@ class BeaconPageReflection extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        {this.commentOverlay()}
+        {/* {this.commentOverlay()} */}
         <Spinner
           visible={this.state.loading}
           textContent={this.props.translateText("beacon.loading")}
@@ -1028,13 +1134,29 @@ const styles = StyleSheet.create({
     elevation: 20,
     marginTop: Platform.OS !== "ios" ? 30 : 0,
   },
+  inputBox: {
+    marginTop: "40%",
+    borderRadius: 10,
+    justifyContent: "center",
+    backgroundColor: "white",
+    width: "80%",
+    height: "30%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.51,
+    shadowRadius: 13.16,
+    elevation: 20,
+  },
   mainHeading: {
     textAlign: "center",
   },
   mainHeadingText: {
     fontSize: 16,
     fontWeight: "500",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#fff",
     padding: 10,
   },
 });
