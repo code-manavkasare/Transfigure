@@ -1,4 +1,6 @@
-const main_url='https://beacon-backend.herokuapp.com/'
+import {API_URL} from '@env'
+
+const main_url = API_URL;
 export async function sendCode (resetemail) {
 
             let url=main_url+'users/sendResetEmail/'

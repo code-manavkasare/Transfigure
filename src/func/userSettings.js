@@ -1,4 +1,6 @@
-const main_url = "https://beacon-backend.herokuapp.com/";
+import {API_URL} from '@env'
+
+const main_url = API_URL;
 import OneSignal from "react-native-onesignal";
 
 export async function fetchDisplayName(authKey) {

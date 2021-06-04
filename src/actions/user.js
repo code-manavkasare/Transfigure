@@ -1,6 +1,7 @@
 import textResource from "../components/textLoader";
+import {API_URL} from '@env'
 
-const main_url = "https://beacon-backend.herokuapp.com/";
+const main_url = API_URL;
 export const updateKey = (authKey) => {
   return {
     type: UPDATE_KEY,

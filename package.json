@@ -17,6 +17,7 @@
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "babel-plugin-dotenv-import": "^2.2.0",
     "countries-and-timezones": "^2.4.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",

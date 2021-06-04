@@ -777,6 +777,7 @@ class ShowQuote extends React.Component {
             backgroundColor: "#f2f2f2",
           }}
           onPress={() => {
+            this.RBSheet.close();
             this.props.navigation.navigate("UserPage", { uuID: uuID });
           }}
         >
@@ -798,6 +799,7 @@ class ShowQuote extends React.Component {
             backgroundColor: "#f2f2f2",
           }}
           onPress={() => {
+            this.RBSheet.close();
             this.props.navigation.navigate("UserPage", { uuID: uuID });
           }}
         >
