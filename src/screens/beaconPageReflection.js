@@ -244,6 +244,7 @@ class BeaconPageReflection extends React.Component {
         <TouchableOpacity
           style={{ flexDirection: "row", alignItems: "center" }}
           onPress={() => {
+            console.log("Clicked on comment!");
             this.setState({ commentOverlayVis: true, chosenCommentType: 0 });
           }}
         >
@@ -1004,7 +1005,7 @@ class BeaconPageReflection extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        {/* {this.commentOverlay()} */}
+        {this.commentOverlay()}
         <Spinner
           visible={this.state.loading}
           textContent={this.props.translateText("beacon.loading")}

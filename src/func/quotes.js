@@ -1,4 +1,6 @@
-const main_url = "https://beacon-backend.herokuapp.com/";
+import { API_URL } from "@env";
+
+const main_url = API_URL;
 export async function getOneQuote(authKey, quoteID) {
   let url = main_url + "quotes/getOne/";
   try {
@@ -271,6 +273,17 @@ export async function addQuote(
       }),
     });
     let json = await response.json();
+    const objec = {
+      authKey: authKey,
+      style: style,
+      title: title,
+      quoteText: quoteText,
+      shareWith: shareWith,
+      backgroundColor: backgroundColor,
+      imagetoSend: imagetoSend,
+      imageChosen: imageChosen,
+    };
+    console.log(json, objec);
 
     if (json.success) {
       return true;
@@ -500,10 +513,10 @@ export async function getUserPostsOfDay(authKey, userUUID, date) {
       }),
     });
     let json = await response.json();
-    console.log(json, 'json')
+    console.log(json, "json");
     if (json.success) {
       return {
-        posts: json.posts
+        posts: json.posts,
       };
     } else {
       return null;
