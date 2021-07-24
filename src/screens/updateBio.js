@@ -25,7 +25,7 @@ import moment from "moment";
 import MyFooter from "../components/centerComp";
 import ParsedText from "react-native-parsed-text";
 import { RadioButton } from "react-native-paper";
-import ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "react-native-image-picker";
 import {
   fetchDisplayName,
   fetchDisplayTitle,
@@ -111,9 +111,11 @@ class UpdateBio extends React.Component {
         skipBackup: true,
         path: "images",
       },
+      includeBase64: true,
     };
 
-    ImagePicker.showImagePicker(async (response) => {
+    ImagePicker.launchImageLibrary(options, async (response) => {
+      console.log(response);
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -122,7 +124,10 @@ class UpdateBio extends React.Component {
         console.log("User tapped custom button: ", response.customButton);
       } else {
         this.setState({ loading: true });
-        let myresp = await setAvatar(this.props.user.authKey, response.data);
+        let myresp = await setAvatar(
+          this.props.user.authKey,
+          response?.assets[0]?.base64
+        );
         if (myresp) {
           await this.fetchAvatar();
         }

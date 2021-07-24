@@ -24,7 +24,7 @@ import moment from "moment";
 import MyFooter from "../components/centerComp";
 import ParsedText from "react-native-parsed-text";
 import { RadioButton } from "react-native-paper";
-import ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "react-native-image-picker";
 import { fetchDisplayName } from "../func/userSettings";
 import { updateInfo, fetchSettingsInfo, getAvatar } from "../func/userSettings";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -132,7 +132,7 @@ class SettingsMirrorReflection extends React.Component {
     );
   }
   showImage() {
-    ImagePicker.showImagePicker((response) => {
+    ImagePicker.launchImageLibrary({ includeBase64: true }, (response) => {
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -144,7 +144,7 @@ class SettingsMirrorReflection extends React.Component {
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
         this.setState({
-          imageUri: response.data,
+          imageUri: response.assets[0].base64,
           imagechosen: true,
         });
       }
