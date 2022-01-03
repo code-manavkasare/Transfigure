@@ -139,6 +139,7 @@ class CreatePost extends React.Component {
         imagetoSend = [];
       }
       this.setState({ loading: true });
+      console.log('imageToSend', imagetoSend)
       let resp = await addQuote(
         this.props.user.authKey,
         myStyle,
@@ -146,7 +147,7 @@ class CreatePost extends React.Component {
         this.state.inputText,
         share,
         this.state.chosenColorBackground,
-        imagetoSend,
+         typeof imagetoSend !== 'object' ? [imagetoSend] : imagetoSend,
         this.state.imageChosen
       );
       this.setState({ loading: false });
@@ -461,12 +462,12 @@ class CreatePost extends React.Component {
         </View>
       );
     } else {
-      let base64Array = [];
-      if (this.state.imageUri.length) {
-        base64Array = this.state.imageUri.map((item) => {
-          return "data:image/png;base64," + item;
-        });
-      }
+      // let base64Array = [];
+      // if (this.state.imageUri.length) {
+      //   base64Array = this.state.imageUri.map((item) => {
+      //     return "data:image/png;base64," + item;
+      //   });
+      // }
       // console.log(this.state.imageUri,"sdshjgdasd")
       return (
         <View
@@ -483,7 +484,7 @@ class CreatePost extends React.Component {
           }}
         >
           {/* <View style={{overflow: 'hidden', position: 'absolute', top: 0}}> */}
-          <SliderBox images={base64Array} />
+          <SliderBox images={[this.state.imageUri]} />
           {/* </View> */}
           <View style={{ position: "absolute", bottom: 10, left: 10 }}>
             <View
