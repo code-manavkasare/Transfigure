@@ -107,15 +107,98 @@ class BuildMainPage extends React.Component {
   renderAllBuilds() {
     let { posts } = this.state;
 
+    const a = [
+      {
+        __v: 0,
+        _id: "61d3c9ecaf79ad062d684e8d",
+        addedByFirstName: "Daniel",
+        addedByLastName: "E",
+        addedByUuid: "25d1059c5b08defeaaca499543e183f9b284847d",
+        backgroundColor: "white",
+        comments: [],
+        dateAdded: "2022-01-04T04:15:40.639Z",
+        imageChosen: true,
+        imageURI: [
+          "https://beaconbucket.s3.eu-west-2.amazonaws.com/7f2fff415dc82afbcafd87ef2b086c353f1721441641269740640_image",
+        ],
+        isQuote: false,
+        likedBy: [],
+        likes: 0,
+        quoteID: "7f2fff415dc82afbcafd87ef2b086c353f172144",
+        quoteText: "test",
+        style: {
+          color: "black",
+          fontFamily: "normal",
+          fontSize: "",
+          fontStyle: "",
+          fontWeight: "",
+        },
+        title: "test title",
+        userFriendList: [
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+        ],
+        visibleBy: 2,
+      },
+      {
+        __v: 0,
+        _id: "61d3c9c7af79ad062d684e8c",
+        addedByFirstName: "Daniel",
+        addedByLastName: "E",
+        addedByUuid: "25d1059c5b08defeaaca499543e183f9b284847d",
+        backgroundColor: "white",
+        comments: [],
+        dateAdded: "2022-01-04T04:15:03.856Z",
+        imageChosen: true,
+        imageURI: [
+          "https://beaconbucket.s3.eu-west-2.amazonaws.com/9808895a1dd02f950c296da1d7abd6708371527c1641269704161_image",
+        ],
+        isQuote: false,
+        likedBy: [],
+        likes: 0,
+        quoteID: "9808895a1dd02f950c296da1d7abd6708371527c",
+        quoteText: "apk release test",
+        style: {
+          color: "black",
+          fontFamily: "normal",
+          fontSize: "",
+          fontStyle: "",
+          fontWeight: "",
+        },
+        title: "I ACHEIVED",
+        userFriendList: [
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+          [Object],
+        ],
+        visibleBy: 1,
+      },
+    ];
+
     console.log(posts, "posts test");
 
     if (posts && posts.length) {
       return posts.map((item, i) => {
-        var src = item.imageURI[0]
-        ? { uri: item.imageURI[0] }
-        : require("../images/Quote.png");
+        var src =
+          typeof item.imageURI === "string"
+            ? item.imageURI
+            : item.imageURI[0]
+            ? { uri: item.imageURI[0] }
+            : require("../images/Quote.png");
         if (i === 0) {
-         
           return (
             <View style={styles.mainBuild} key={i}>
               <TouchableOpacity
